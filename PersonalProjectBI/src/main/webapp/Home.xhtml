@@ -1,0 +1,111 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/Layout.xhtml">
+	
+	<ui:define name="content">
+	
+	<f:metadata>
+		<f:viewAction action="#{ativaBean.Buscar}"></f:viewAction>
+	</f:metadata>	
+		
+		<h1 class="aw-page-title">HomePage</h1>
+		
+		<h:form id="home-frm">
+		
+		<p:messages autoUpdate="true" closable="true"/>
+		
+                <div class="p-col-12">
+                    <div class="notification">
+                        <h6>👋  Hello! Welcome to Projects Business Intelligence System! You can start checking the metrics down below. </h6>
+                    </div>
+                </div>
+                <div class="p-col-12">
+                    <div class="p-grid" style="margin: -1rem;">
+                        <div class="p-col">
+                            <div class="card overview-box white">
+                                <div class="overview-info">
+                                    <h6>Projetos Pessoais</h6>
+                                    <h1>#{homeBean.totalProjetosPessoais}</h1>
+                                </div>
+                                <i class="pi pi-image"></i>
+                            </div>
+                        </div>
+                        <div class="p-col">
+                            <div class="card overview-box blue">
+                                <div class="overview-info">
+                                    <h6>Processos Seletivos</h6>
+                                    <h1>#{homeBean.totalProjetosSeletivos}</h1>
+                                </div>
+                                <i class="pi pi-users"></i>
+                            </div>
+                        </div>
+                        <div class="p-col">
+                            <div class="card overview-box gray">
+                                <div class="overview-info">
+                                    <h6>Tempo Total em Projetos Finalizados</h6>
+                                    <h1>#{homeBean.tempoTotalProjetosFinalizados} -- example: 5h12m</h1>
+                                </div>
+                                <i class="pi pi-globe"></i>
+                            </div>
+                        </div>
+                        <div class="p-col">
+                            <div class="card overview-box darkgray">
+                                <div class="overview-info">
+                                    <h6>Porcentagem Projetos Finalizados</h6>
+                                    <h1>#{homeBean.totalProjetosFinalizados}%</h1>
+                                </div>
+                                <i class="pi pi-th-large"></i>
+                            </div>
+                        </div>
+                        <div class="p-col">
+                            <div class="card overview-box orange">
+                                <div class="overview-info">
+                                    <h6>Projetos Pessoais em Produção</h6>
+                                    <h1>#{homeBean.totalProjetosPessoaisEmProducao}</h1>
+                                </div>
+                                <i class="pi pi-cloud"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+		
+		<br/>
+		
+		<p:separator/>
+			
+		<br/>
+			
+			<h:panelGroup id="chartPanel" layout="block" styleClass="ui-fluid">
+				<div align="center">
+				<p:outputLabel value="Projetos Gráficos" style="font-weight:bold;font-size:16px"/>
+				<p:outputLabel/>
+				</div>
+			<p:panelGrid columns="2" layout="grid" columnClasses="left,right" styleClass="panelgrid-noborder">
+				
+				<p:chart type="bar" model="#{homeBean.graficoTotalProjetos}" responsive="true" id="grafico-projetos"
+							rendered="#{homeBean.graficoTotalProjetos != null}" style="height:300px;" />
+				
+				
+				
+				<p:chart id="grafico-projetosFinalizados" type="pie" model="#{homeBean.graficoProjetosFinalizados}" responsive="true"
+							rendered="#{homeBean.graficoProjetosFinalizados != null}" style="height:300px;" />
+							
+			</p:panelGrid>
+				
+			<p:panelGrid columns="1" layout="grid" styleClass="panelgrid-noborder" columnClasses="ui-grid-col-12">
+			
+				<p:chart id="grafico-producao" type="line" model="#{homeBean.graficoProjetosProducao}" rendered="#{homeBean.graficoProjetosProducao != null}"  
+								responsive="true" style="height:300px;" />
+				
+			</p:panelGrid>			
+							
+			
+			</h:panelGroup>
+			
+		</h:form>
+	</ui:define>
+	
+</ui:composition>
