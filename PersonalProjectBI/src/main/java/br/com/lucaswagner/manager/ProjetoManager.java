@@ -27,7 +27,7 @@ public class ProjetoManager implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public void CadastrarPessoa(Projeto p) {
+	public void Cadastrar(Projeto p) {
 
 		EntityManager em = JpaUtil.getEntityManager();
 
