@@ -49,8 +49,12 @@
 					 
 			<p:ajax event="rowSelect" update=":usuario-frm:toolbar"/>
 			<p:ajax event="rowUnselect" update=":usuario-frm:toolbar"/>
-		
+			
 			<p:column headerText="Nome do Usuario" style="text-align:center" filterBy="#{user.login}">
+				<h:outputText value="#{user.nome}"/>
+			</p:column>
+		
+			<p:column headerText="E-mail do Usuario" style="text-align:center" filterBy="#{user.login}">
 				<h:outputText value="#{user.login}"/>
 			</p:column>
 
@@ -80,8 +84,11 @@
 						<p:defaultCommand target="botao-salvar" scope="usuario-dialog" />
 						<p:outputLabel/>
 						
-        			<p:outputLabel for="nome" value="E-mail do Usuario: " />
-         			<p:inputText id="nome" value="#{usuarioBean.user.login}"/>
+        			<p:outputLabel for="nome" value="Nome do Usuario: " />
+         			<p:inputText id="nome" value="#{usuarioBean.user.nome}"/>
+         			
+         			<p:outputLabel for="email" value="E-mail do Usuario: " />
+         			<p:inputText id="email" value="#{usuarioBean.user.login}"/>
             
             		<p:outputLabel for="papel" value="Papel: " />
             		<p:selectOneMenu id="papel" value="#{usuarioBean.user.papel}" style="width:125px">

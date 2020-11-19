@@ -32,7 +32,7 @@ public class Empresa implements Serializable {
 	
 	@NotEmpty
 	@Column(name="Empresa_RH_Contato", nullable=false)
-	private String hrContact;
+	private String contatoRH;
 	
 	@NotEmpty
 	@Column(name="Empresa_Telefone", nullable=false)
@@ -54,12 +54,12 @@ public class Empresa implements Serializable {
 		this.site = site;
 	}
 
-	public String getHrContact() {
-		return hrContact;
+	public String getContatoRH() {
+		return contatoRH;
 	}
 
-	public void setHrContact(String hrContact) {
-		this.hrContact = hrContact;
+	public void setContatoRH(String contatoRH) {
+		this.contatoRH = contatoRH;
 	}
 
 	public String getTelefone() {

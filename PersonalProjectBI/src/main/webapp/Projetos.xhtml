@@ -31,11 +31,10 @@
 										update="projeto-dialog" oncomplete="PF('projeto-Dialog').show()"  />
 						
 					</p:menuButton>
-
-					<p:commandButton value="Cadastrar Projeto" process="@this"
-						icon="fa fa-fw fa-plus" action="#{projetoBean.ProjetoEmEdicao}"
-						update="projeto-dialog" oncomplete="PF('projeto-Dialog').show()" />
-
+					
+					<span class="ui-separator">
+						<span class="ui-icon ui-icon-grip-dotted-vertical"/>
+					</span>
 
 					<p:commandButton value="Atualizar Projeto" process="@this" icon="fa fa-fw fa-edit" action="#{projetoBean.AtualizarProjetoEmEdicao}"
 						update="projeto-dialog" disabled="#{projetoBean.projetoSelecionado == null}" oncomplete="PF('projeto-Dialog').show()" />
@@ -43,7 +42,7 @@
 				</p:toolbarGroup>
 			</p:toolbar>
 
-			<!-- datatable paciente -->
+			<!-- datatable projetos -->
 
 			<p:dataTable id="table-projetos" value="#{projetoBean.projetos}"
 				var="projeto" reflow="true"
@@ -150,7 +149,7 @@
 						<p:outputLabel for="datainicio" value="Data Início: " />
 						<p:calendar id="datainicio"
 							value="#{projetoBean.projeto.dataInicio}" pattern="dd/MM/yyyy"
-							locale="pt">
+							locale="pt"/>
 
 							<p:outputLabel for="finalizado" value="Finalizado? " />
 							<p:selectOneMenu id="finalizado"
@@ -165,11 +164,11 @@
 							<p:calendar id="datafim"
 								value="#{projetoBean.projeto.dataFinalizado}"
 								pattern="dd/MM/yyyy" locale="pt"
-								disabled="#{projetoBean.projeto.finalizado != true}">
+								disabled="#{projetoBean.projeto.finalizado != true}"/>
 
 								<p:outputLabel for="aprovado" value="Aprovado? " />
 								<p:selectOneMenu id="aprovado"
-									value="#{projetoBean.projeto.aprovado}"
+									value="#{projetoBean.aprovado}"
 									disabled="#{projetoBean.tipoProjeto != 'Seletivo'}">
 									<f:selectItem itemLabel="Escolha" itemValue=""
 										noSelectionOption="true" />
@@ -179,7 +178,7 @@
 
 								<p:outputLabel for="empresa" value="Empresa: " />
 								<p:autoComplete id="empresa"
-									value="#{projetoBean.projeto.empresaResponsavel}" var="emp"
+									value="#{projetoBean.empresaResponsavel}" var="emp"
 									itemLabel="#{emp.nome}" itemValue="#{emp}"
 									forceSelection="true" converter="empresaConverter"
 									required="true" requiredMessage="Escolha a Empresa"
@@ -193,7 +192,7 @@
 
 								<p:outputLabel for="emproducao" value="Em Produção? " />
 								<p:selectOneMenu id="emproducao"
-									value="#{projetoBean.projeto.emProducao}"
+									value="#{projetoBean.emProducao}"
 									disabled="#{projetoBean.tipoProjeto != 'Pessoal'}">
 									<f:selectItem itemLabel="Escolha" itemValue=""
 										noSelectionOption="true" />
@@ -203,7 +202,7 @@
 
 								<p:outputLabel />
 								<p:commandButton id="botao-salvarProjeto" value="Salvar"
-									actionListener="#{projetoBean.Salvar}" process="agenda-dialog"
+									actionListener="#{projetoBean.Salvar}" process="projeto-dialog"
 									update="projetoPanel table-projetos"
 									oncomplete="if (!args.validationFailed) PF('projeto-Dialog').hide()" />
 					</p:panelGrid>

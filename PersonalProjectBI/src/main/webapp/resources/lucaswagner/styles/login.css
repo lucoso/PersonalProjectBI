@@ -16,7 +16,7 @@ body {
   margin: 0 0 20px;
   font-size: 48px;
   font-weight: 300;
-  color: green;
+  color: #1a1a1a;
 }
 
 .form-module {
@@ -24,7 +24,7 @@ body {
   background: #ffffff;
   max-width: 320px;
   width: 100%;
-  border-top: 5px solid #008000;
+  border-top: 5px solid #1a1a1a;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
   margin: 0 auto;
 }
@@ -37,7 +37,7 @@ body {
 }
 .form-module h2 {
   margin: 0 0 20px;
-  color: #008000;
+  color: #1a1a1a;
   font-size: 18px;
   font-weight: 400;
   line-height: 1;
@@ -60,7 +60,7 @@ body {
 }
 .form-module button {
   cursor: pointer;
-  background: #008000;
+  background: #1a1a1a;
   width: 100%;
   border: 0;
   padding: 10px 15px;
@@ -69,7 +69,7 @@ body {
   transition: 0.3s ease;
 }
 .form-module button:hover {
-  background: #008000;
+  background: #1a1a1a;
 }
 
 .form-module .forgot {
@@ -85,27 +85,27 @@ body {
 @media screen and (max-width: 761px){
 	body{background-color: white; }
 	.index-title h1{font-size: 18px; }
-	.form-module{background-color: green; }
+	.form-module{background-color: #1a1a1a; }
 	.form{background-color: white; }
 }
 
 @media screen and (max-width: 760px){
 	body{background-color: white; }
 	.index-title h1{font-size: 18px; }
-	.form-module{background-color: green; }
+	.form-module{background-color: #1a1a1a; }
 	.form{background-color: white; }
 }
 
 @media screen and (max-width: 480px){
 	body{background-color: white; }
 	.index-title h1{font-size: 18px; }
-	.form-module{background-color: green; }
+	.form-module{background-color: #1a1a1a; }
 	.form{background-color: white; }
 }
 
 @media screen and (max-width: 360px){
 	body{background-color: white; }
 	.index-title h1{font-size: 18px; }
-	.form-module{background-color: green; }
+	.form-module{background-color: #1a1a1a; }
 	.form{background-color: white; }
 }

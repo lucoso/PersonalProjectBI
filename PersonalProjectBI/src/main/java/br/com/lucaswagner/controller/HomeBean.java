@@ -2,7 +2,9 @@ package br.com.lucaswagner.controller;
 
 import java.io.Serializable;
 import java.time.Period;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -11,7 +13,7 @@ import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
-import org.primefaces.model.chart.LineChartModel;
+import org.primefaces.model.chart.DonutChartModel;
 import org.primefaces.model.chart.PieChartModel;
 
 import br.com.lucaswagner.manager.ProjetoManager;
@@ -44,7 +46,9 @@ public class HomeBean implements Serializable {
 
 	private BarChartModel graficoTotalProjetos;
 
-	private LineChartModel graficoProjetosProducao;
+	//private LineChartModel graficoProjetosProducao;
+	
+	private DonutChartModel graficoProjetosProducao;
 
 	private ProjetoManager pm = new ProjetoManager();
 	
@@ -114,11 +118,11 @@ public class HomeBean implements Serializable {
 		this.graficoTotalProjetos = graficoTotalProjetos;
 	}
 
-	public LineChartModel getGraficoProjetosProducao() {
+	public DonutChartModel getGraficoProjetosProducao() {
 		return graficoProjetosProducao;
 	}
 
-	public void setGraficoProjetosProducao(LineChartModel graficoProjetosProducao) {
+	public void setGraficoProjetosProducao(DonutChartModel graficoProjetosProducao) {
 		this.graficoProjetosProducao = graficoProjetosProducao;
 	}
 
@@ -249,8 +253,37 @@ public class HomeBean implements Serializable {
 		yAxis.setMax(maxGraficoBarra);
 		yAxis.setTickFormat("%d");
 	}
+	
+	private void MontarGraficoProducao(){
+		
+		DonutChartModel model = new DonutChartModel();
+		
+		 List<Pessoal> projetosPessoais = pm.BuscarTodosProjetosPessoais();
+	     int emProducao = 0;
+	     int NaoEmProducao = 0;
+	     
+	     for(Pessoal p : projetosPessoais){
+	    	 if(p.isEmProducao() == true){
+	    		 emProducao++;
+	    	 }else{
+	    		 NaoEmProducao++;
+	    	 }
+	     }
+		
+		Map<String, Number> circle = new LinkedHashMap<String, Number>();
+        circle.put("Projetos Pessoais que estão em Produção", emProducao);
+        circle.put("Projetos Pessoais que NÃO estão em Produção", NaoEmProducao);
+        model.addCircle(circle);
+        
+        graficoProjetosProducao = model;
+        graficoProjetosProducao.setTitle("Donut Chart");
+        graficoProjetosProducao.setLegendPosition("w");
+        graficoProjetosProducao.setSliceMargin(5);
+        graficoProjetosProducao.setShowDataLabels(true);
+        
+	}
 
-	private void MontarGraficoProducao() {
+	/*private void MontarGraficoProducao() {
 	    
 		 LineChartModel model = new LineChartModel();
 		 ChartSeries pessoalEmProducao = new ChartSeries();
@@ -293,6 +326,6 @@ public class HomeBean implements Serializable {
 	    yAxis.setMin(0);
 	    yAxis.setMax(maxGraficoLinha);
 	    yAxis.setTickFormat("%d");
-	}
+	}*/
 
 }

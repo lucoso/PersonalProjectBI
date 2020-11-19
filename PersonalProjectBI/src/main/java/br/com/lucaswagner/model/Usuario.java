@@ -27,7 +27,11 @@ public class Usuario implements Serializable {
 	private long id;
 	
 	@NotEmpty
-	@Column(name="Usuario_login", length=100, nullable=false)
+	@Column(name="Usuario_Nome", nullable=false)
+	private String nome;
+	
+	@NotEmpty
+	@Column(name="Usuario_login", length=50, nullable=false)
 	private String login;
 	
 	@NotEmpty
@@ -44,6 +48,14 @@ public class Usuario implements Serializable {
 	
 	public Usuario(){
 		
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public String getLogin() {

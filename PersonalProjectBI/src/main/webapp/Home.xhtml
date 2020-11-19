@@ -17,62 +17,39 @@
 		
 		<p:messages autoUpdate="true" closable="true"/>
 		
-                <div class="p-col-12">
-                    <div class="notification">
-                        <h6>👋  Hello! Welcome to Projects Business Intelligence System! You can start checking the metrics down below. </h6>
-                    </div>
-                </div>
-                <div class="p-col-12">
-                    <div class="p-grid" style="margin: -1rem;">
-                        <div class="p-col">
-                            <div class="card overview-box white">
-                                <div class="overview-info">
-                                    <h6>Projetos Pessoais</h6>
-                                    <h1>#{homeBean.totalProjetosPessoais}</h1>
-                                </div>
-                                <i class="pi pi-image"></i>
-                            </div>
-                        </div>
-                        <div class="p-col">
-                            <div class="card overview-box blue">
-                                <div class="overview-info">
-                                    <h6>Processos Seletivos</h6>
-                                    <h1>#{homeBean.totalProjetosSeletivos}</h1>
-                                </div>
-                                <i class="pi pi-users"></i>
-                            </div>
-                        </div>
-                        <div class="p-col">
-                            <div class="card overview-box gray">
-                                <div class="overview-info">
-                                    <h6>Tempo Total em Projetos Finalizados</h6>
-                                    <h1>#{homeBean.tempoTotalProjetosFinalizados} -- example: 5h12m</h1>
-                                </div>
-                                <i class="pi pi-globe"></i>
-                            </div>
-                        </div>
-                        <div class="p-col">
-                            <div class="card overview-box darkgray">
-                                <div class="overview-info">
-                                    <h6>Porcentagem Projetos Finalizados</h6>
-                                    <h1>#{homeBean.totalProjetosFinalizados}%</h1>
-                                </div>
-                                <i class="pi pi-th-large"></i>
-                            </div>
-                        </div>
-                        <div class="p-col">
-                            <div class="card overview-box orange">
-                                <div class="overview-info">
-                                    <h6>Projetos Pessoais em Produção</h6>
-                                    <h1>#{homeBean.totalProjetosPessoaisEmProducao}</h1>
-                                </div>
-                                <i class="pi pi-cloud"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-		
-		<br/>
+		<p:panelGrid cellspacing="15" columns="5" layout="grid" columnClasses="left,right" styleClass="ui-panelgrid-blank" >
+			
+    			<p:panel header="Projetos Pessoais" style="width:200px">
+        			<h:panelGrid columns="1" cellpadding="10">
+                    	<h1>#{homeBean.totalProjetosPessoais}</h1>
+        			</h:panelGrid>
+    			</p:panel>
+    		
+    			<p:panel header="Processos Seletivos" style="width:200px">
+        			<h:panelGrid columns="1" cellpadding="10">
+                    	<h1>#{homeBean.totalProjetosSeletivos}</h1>
+        			</h:panelGrid>
+    			</p:panel>
+    			
+    			<p:panel header="Tempo Total em Projetos Finalizados" style="width:300px">
+        			<h:panelGrid columns="1" cellpadding="10">
+                     <h1>#{homeBean.tempoTotalProjetosFinalizados}</h1>
+        			</h:panelGrid>
+    			</p:panel>
+    			
+    			<p:panel header="Porcentagem Projetos Finalizados" style="width:200px">
+        			<h:panelGrid columns="1" cellpadding="10">
+                     <h1>#{homeBean.totalProjetosFinalizados}%</h1>
+        			</h:panelGrid>
+    			</p:panel>
+    			
+    			<p:panel header="Projetos Pessoais em Produção" style="width:200px">
+        			<h:panelGrid columns="1" cellpadding="10">
+                     <h1>#{homeBean.totalProjetosPessoaisEmProducao}</h1>
+        			</h:panelGrid>
+    			</p:panel>
+		</p:panelGrid>
+
 		
 		<p:separator/>
 			
@@ -97,7 +74,7 @@
 				
 			<p:panelGrid columns="1" layout="grid" styleClass="panelgrid-noborder" columnClasses="ui-grid-col-12">
 			
-				<p:chart id="grafico-producao" type="line" model="#{homeBean.graficoProjetosProducao}" rendered="#{homeBean.graficoProjetosProducao != null}"  
+				<p:chart id="grafico-producao" type="donut" model="#{homeBean.graficoProjetosProducao}" rendered="#{homeBean.graficoProjetosProducao != null}"  
 								responsive="true" style="height:300px;" />
 				
 			</p:panelGrid>			

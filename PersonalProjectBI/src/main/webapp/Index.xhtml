@@ -1,10 +1,100 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
-</head>
-<body>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
 
-</body>
+<h:head>
+<meta charset="UTF-8" name="viewport" content="width=device-width" />
+<link rel="shorcut icon" type="image/x-icon" href="#{resources['images/favicon.ico']}" />
+<title>Personal Projects BI</title>
+<h:outputStylesheet library="lucaswagner" name="styles/login.css"/>
+<h:outputStylesheet library="lucaswagner" name="styles/custom.css"/>
+</h:head>
+
+<h:body>
+
+<f:metadata>
+	<f:viewAction action="#{indexBean.BuscaInicial}"/>
+</f:metadata>
+
+			
+<div class="index-title">
+
+<h1>Bem-Vindo ao Sistema de Projetos</h1>
+
+</div>
+
+<div class="form-module">
+<div class="form">
+    <h2>Faça o Login para Entrar</h2>
+    <h:outputText value="Usuário ou senha incorretos!" rendered="#{param.erro}" style="color: darkred"/>
+      <form id="formlogin" action="j_spring_security_check" method="post">
+      <h:inputText id="j_username" required="true" />
+      	<p:watermark value="E-mail" for="j_username" />	
+      <h:inputSecret id="j_password" required="true"/>
+      	<p:watermark value="Senha" for="j_password" />
+      <button id="btlogar">Login</button>
+    </form>
+</div>
+
+<div class="forgot">
+<h:form>
+	<p:commandLink action="#{indexBean.Limpar}" update=":dialogs:recuperarsenha-dialog" oncomplete="PF('recuperarsenha-Dialog').show()" >
+		<h:outputText value="Esqueceu sua Senha? Clique Aqui"></h:outputText>
+	</p:commandLink>
+</h:form>
+</div>
+
+</div>
+	
+<p:growl id="msg" sticky="true" autoUpdate="true"/>
+
+<h:form id="dialogs">        
+<p:dialog id="progresso-dialog" height="150" width="800" responsive="true" widgetVar="progresso-Dialog" header="Instalação do Sistema" resizable="false" modal="true">
+	<div align="center" class="ui-fluid">
+	<br/>
+	<p:commandButton value="Clique Para Iniciar a Instalação" onclick="PF('progressoBar').start();PF('botaoiniciar').disable();" widgetVar="botaoiniciar"/>
+	<br/><br/>
+	<p:progressBar widgetVar="progressoBar" ajax="true" value="#{indexBean.progress}" labelTemplate="{value}%" styleClass="animated" global="false">
+		<p:ajax event="complete" listener="#{indexBean.AoCompletar}" update="msg" global="false"/>
+	</p:progressBar>
+	</div>                
+</p:dialog>
+
+<p:dialog widgetVar="recuperarsenha-Dialog" id="recuperarsenha-dialog" header="Recuperar Senha"
+				resizable="false" style="min-width: 300px" responsive="true" modal="true">
+				
+				<h:panelGroup id="recuperarPanel" layout="block" styleClass="ui-fluid">
+					
+					<p:messages id="msg-senha" autoUpdate="false"/>
+					
+					<p:panelGrid columns="2" layout="grid" styleClass="panelgrid-noborder" id="painel-recuperar"
+						columnClasses="ui-grid-col-4, ui-grid-col-4">
+						
+						<p:defaultCommand target="botao-recuperar" scope="recuperarsenha-dialog" />
+						<p:outputLabel/>						
+            			
+            			<p:outputLabel for="nome" value="Digite o E-mail Cadastrado: " />
+						<p:inputText id="nome" value="#{indexBean.username}" required="true" requiredMessage="Para Recuperar a Senha é Necessario Digitar seu E-mail" />							
+						
+						<p:outputLabel/>
+						<p:commandButton id="botao-recuperar" value="Recuperar" action="#{indexBean.Recuperar}" 
+										process="recuperarsenha-dialog" update="painel-recuperar" />
+						</p:panelGrid>
+				</h:panelGroup>
+			</p:dialog>
+			
+			 <p:ajaxStatus onstart="PF('status-Dialog').show()" onsuccess="PF('status-Dialog').hide()"/>
+        
+        <p:dialog id="status-dialog" widgetVar="status-Dialog" showHeader="false" responsive="true" resizable="false" closable="false" modal="true">
+        	<p:graphicImage name="/mmw/images/ajaxloadingbar.gif"/>
+        </p:dialog>	
+
+</h:form>    
+
+
+</h:body>
+
 </html>
