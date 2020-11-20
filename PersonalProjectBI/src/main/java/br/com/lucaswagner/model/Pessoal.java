@@ -16,10 +16,9 @@ public class Pessoal extends Projeto {
 	@Column(name="Projeto_Pessoal_EmProducao", nullable=true)
 	private boolean emProducao;
 
-	
 	public Pessoal(Long id, String nome, LocalDate dataInicio, LocalDate dataFinalizado, boolean finalizado,
-			Usuario usuario, boolean emProducao) {
-		super(id, nome, dataInicio, dataFinalizado, finalizado, usuario);
+			Usuario usuario, String tipo, boolean emProducao) {
+		super(id, nome, dataInicio, dataFinalizado, finalizado, usuario, tipo);
 		this.emProducao = emProducao;
 	}
 

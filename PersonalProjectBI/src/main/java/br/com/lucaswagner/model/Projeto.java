@@ -12,6 +12,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -37,8 +38,7 @@ public abstract class Projeto implements Serializable {
 	@Column(name="Projeto_Data_Inicio", nullable=false)
 	private LocalDate dataInicio;
 	
-	@NotNull
-	@Column(name="Projeto_Data_Finalizado", nullable=false)
+	@Column(name="Projeto_Data_Finalizado", nullable=true)
 	private LocalDate dataFinalizado;
 	
 	@NotNull
@@ -48,9 +48,12 @@ public abstract class Projeto implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "Usuario_ID")
 	private Usuario usuario;
+	
+	@Transient
+	private String tipo;
 
 	public Projeto(Long id, String nome, LocalDate dataInicio, LocalDate dataFinalizado, boolean finalizado,
-			Usuario usuario) {
+			Usuario usuario, String tipo) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -58,6 +61,7 @@ public abstract class Projeto implements Serializable {
 		this.dataFinalizado = dataFinalizado;
 		this.finalizado = finalizado;
 		this.usuario = usuario;
+		this.tipo = tipo;
 	}
 
 	public Projeto(){
@@ -102,6 +106,14 @@ public abstract class Projeto implements Serializable {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
 
 	public Long getId() {

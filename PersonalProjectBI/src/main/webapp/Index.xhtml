@@ -39,6 +39,8 @@
     </form>
 </div>
 
+
+
 <div class="forgot">
 <h:form>
 	<p:commandLink action="#{indexBean.Limpar}" update=":dialogs:recuperarsenha-dialog" oncomplete="PF('recuperarsenha-Dialog').show()" >
@@ -48,17 +50,20 @@
 </div>
 
 </div>
-	
+
+
+<h:form id="dialogs"> 	
+
 <p:growl id="msg" sticky="true" autoUpdate="true"/>
 
-<h:form id="dialogs">        
+       
 <p:dialog id="progresso-dialog" height="150" width="800" responsive="true" widgetVar="progresso-Dialog" header="Instalação do Sistema" resizable="false" modal="true">
 	<div align="center" class="ui-fluid">
 	<br/>
 	<p:commandButton value="Clique Para Iniciar a Instalação" onclick="PF('progressoBar').start();PF('botaoiniciar').disable();" widgetVar="botaoiniciar"/>
 	<br/><br/>
 	<p:progressBar widgetVar="progressoBar" ajax="true" value="#{indexBean.progress}" labelTemplate="{value}%" styleClass="animated" global="false">
-		<p:ajax event="complete" listener="#{indexBean.AoCompletar}" update="msg" global="false"/>
+		<p:ajax event="complete" listener="#{indexBean.AoCompletar}" update=":dialogs:msg" global="false"/>
 	</p:progressBar>
 	</div>                
 </p:dialog>
@@ -89,7 +94,7 @@
 			 <p:ajaxStatus onstart="PF('status-Dialog').show()" onsuccess="PF('status-Dialog').hide()"/>
         
         <p:dialog id="status-dialog" widgetVar="status-Dialog" showHeader="false" responsive="true" resizable="false" closable="false" modal="true">
-        	<p:graphicImage name="/mmw/images/ajaxloadingbar.gif"/>
+        	<p:graphicImage name="/lucaswagner/images/ajaxloadingbar.gif"/>
         </p:dialog>	
 
 </h:form>    

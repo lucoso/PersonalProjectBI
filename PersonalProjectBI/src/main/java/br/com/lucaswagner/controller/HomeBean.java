@@ -168,10 +168,12 @@ public class HomeBean implements Serializable {
 		int dias = 0;
 
 		for (Projeto p : projetos) {
-			Period periodo = Period.between(p.getDataInicio(), p.getDataFinalizado());
-			anos = anos + periodo.getYears();
-			meses = meses + periodo.getMonths();
-			dias = dias + periodo.getDays();
+			if(p.isFinalizado() == true){
+				Period periodo = Period.between(p.getDataInicio(), p.getDataFinalizado());
+				anos = anos + periodo.getYears();
+				meses = meses + periodo.getMonths();
+				dias = dias + periodo.getDays();
+			}	
 		}
 
 		tempoTotal = anos + "anos" + meses + "meses" + dias + "dias";

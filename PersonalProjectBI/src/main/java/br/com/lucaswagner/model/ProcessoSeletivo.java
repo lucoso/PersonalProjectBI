@@ -19,14 +19,13 @@ public class ProcessoSeletivo extends Projeto {
 	@Column(name="Projeto_Seletivo_Aprovado", nullable=true)
 	private boolean aprovado;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "Projeto_Seletivo_EmpresaResponsavel_ID")
 	private Empresa empresaResponsavel;
 
-
 	public ProcessoSeletivo(Long id, String nome, LocalDate dataInicio, LocalDate dataFinalizado, boolean finalizado,
-			Usuario usuario, boolean aprovado, Empresa empresaResponsavel) {
-		super(id, nome, dataInicio, dataFinalizado, finalizado, usuario);
+			Usuario usuario, String tipo, boolean aprovado, Empresa empresaResponsavel) {
+		super(id, nome, dataInicio, dataFinalizado, finalizado, usuario, tipo);
 		this.aprovado = aprovado;
 		this.empresaResponsavel = empresaResponsavel;
 	}

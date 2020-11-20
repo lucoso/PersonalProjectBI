@@ -19,7 +19,7 @@
 			<p:messages autoUpdate="true" />
 
 			<p:toolbar id="toolbar">
-				<p:toolbarGroup>
+				<p:toolbarGroup align="left">
 
 					<p:menuButton value="Cadastrar Projeto">
 						<p:menuitem value="Pessoal" process="@this" icon="fa fa-fw fa-plus" action="#{projetoBean.ProjetoPessoalEmEdicao}"
@@ -39,6 +39,13 @@
 					<p:commandButton value="Atualizar Projeto" process="@this" icon="fa fa-fw fa-edit" action="#{projetoBean.AtualizarProjetoEmEdicao}"
 						update="projeto-dialog" disabled="#{projetoBean.projetoSelecionado == null}" oncomplete="PF('projeto-Dialog').show()" />
 
+				</p:toolbarGroup>
+				
+				<p:toolbarGroup align="right">
+					
+					<p:commandButton value="Finalizar Projeto" process="@this" icon="fa fa-fw fa-arrow-circle-right" action="#{projetoBean.FinalizarEmEdicao}"
+						update="projetofinal-dialog" disabled="#{projetoBean.projetoSelecionado == null}" />
+						
 				</p:toolbarGroup>
 			</p:toolbar>
 
@@ -60,10 +67,8 @@
 				</f:facet>
 
 				<p:column headerText="Tipo de Projeto" style="text-align:center">
-					<h:outputText value="Projeto Pessoal"
-						rendered="#{projeto.emProducao != null}" />
-					<h:outputText value="Projeto Processo Seletivo"
-						rendered="#{projeto.emProducao == null}" />
+					<h:outputText value="Projeto Pessoal" rendered="#{projeto.tipo == 'Pessoal'}" />
+					<h:outputText value="Projeto Processo Seletivo" rendered="#{projeto.tipo == 'Seletivo'}" />
 				</p:column>
 
 				<p:column headerText="Nome" style="text-align:center"
@@ -73,7 +78,7 @@
 
 				<p:column headerText="Data de Início" style="text-align:center">
 					<h:outputText value="#{projeto.dataInicio}">
-						<f:convertDateTime pattern="dd/MM/yyyy" />
+						<f:converter converterId="dateConverter"/>
 					</h:outputText>
 				</p:column>
 
@@ -85,22 +90,15 @@
 
 				<p:column headerText="Data Finalizado" style="text-align:center">
 					<h:outputText value="#{projeto.dataFinalizado}">
-						<f:convertDateTime pattern="dd/MM/yyyy" />
+						<f:converter converterId="dateConverter"/>
 					</h:outputText>
 				</p:column>
-
-				<p:column headerText="Em Produção" style="text-align:center">
-					<h:outputText value="Sim" rendered="#{projeto.emProducao == true}" />
-					<h:outputText value="Não" rendered="#{projeto.emProducao == false}" />
-				</p:column>
-
-				<p:column headerText="Aprovado" style="text-align:center">
-					<h:outputText value="Sim" rendered="#{projeto.aprovado == true}" />
-					<h:outputText value="Não" rendered="#{projeto.aprovado == false}" />
-				</p:column>
-
-				<p:column headerText="Empresa" style="text-align:center">
-					<h:outputText value="#{projeto.empresaResponsavel.nome}" />
+				
+				<p:column headerText="Informações Extras" style="text-align:center">
+					<p:commandButton update=":projeto-frm:extras-dialog" oncomplete="PF('extras-Dialog').show()" icon="ui-icon-search" action="#{projetoBean.MostrarExtrasProjeto}"
+								title="Exibir" process="@this">
+						<f:setPropertyActionListener target="#{projetoBean.projetoSelecionado}" value="#{projeto}"/>
+					</p:commandButton>	
 				</p:column>
 
 				<p:column headerText="Excluir Projeto" style="text-align:center">
@@ -124,8 +122,6 @@
 
 				<h:panelGroup id="projetoPanel" layout="block" styleClass="ui-fluid">
 
-					<p:messages autoUpdate="true" id="msg-ag" />
-
 					<p:panelGrid columns="2" layout="grid"
 						styleClass="panelgrid-noborder" id="painel-dialog"
 						columnClasses="ui-grid-col-4, ui-grid-col-8">
@@ -147,9 +143,7 @@
 						<p:inputText id="nome" value="#{projetoBean.projeto.nome}" />
 
 						<p:outputLabel for="datainicio" value="Data Início: " />
-						<p:calendar id="datainicio"
-							value="#{projetoBean.projeto.dataInicio}" pattern="dd/MM/yyyy"
-							locale="pt"/>
+						<p:calendar id="datainicio" value="#{projetoBean.dataInicio}" pattern="dd/MM/yyyy" locale="pt"/>
 
 							<p:outputLabel for="finalizado" value="Finalizado? " />
 							<p:selectOneMenu id="finalizado"
@@ -158,12 +152,11 @@
 									noSelectionOption="true" />
 								<f:selectItem itemLabel="SIM" itemValue="true" />
 								<f:selectItem itemLabel="NÃO" itemValue="false" />
+								<p:ajax update="datafim" />
 							</p:selectOneMenu>
 
 							<p:outputLabel for="datafim" value="Data Finalizado: " />
-							<p:calendar id="datafim"
-								value="#{projetoBean.projeto.dataFinalizado}"
-								pattern="dd/MM/yyyy" locale="pt"
+							<p:calendar id="datafim" value="#{projetoBean.dataFinalizado}" pattern="dd/MM/yyyy" locale="pt"
 								disabled="#{projetoBean.projeto.finalizado != true}"/>
 
 								<p:outputLabel for="aprovado" value="Aprovado? " />
@@ -210,6 +203,81 @@
 				</h:panelGroup>
 
 			</p:dialog>
+			
+			<!-- Dialog finalizar projeto -->
+
+			<p:dialog widgetVar="projetofinal-Dialog" id="projetofinal-dialog" header="Finalizar Projeto" resizable="false" style="min-width: 300px"
+									responsive="true" modal="true">
+
+				<h:panelGroup id="projetofinalPanel" layout="block" styleClass="ui-fluid">
+
+					<p:panelGrid columns="2" layout="grid"
+						styleClass="panelgrid-noborder" id="painelfinal-dialog"
+						columnClasses="ui-grid-col-4, ui-grid-col-8">
+
+						<p:defaultCommand target="botao-finalizarProjeto" scope="projetofinal-dialog" />
+						<p:outputLabel />
+						
+						<p:outputLabel />
+						<p:outputLabel value="Preencha o dado abaixo para finalizar o Projeto" />
+
+								<p:outputLabel for="aprovadofinal" value="Aprovado? " />
+								<p:selectOneMenu id="aprovadofinal" value="#{projetoBean.aprovadoFinalizar}" disabled="#{projetoBean.tipoProjeto != 'Seletivo'}">
+									<f:selectItem itemLabel="Escolha" itemValue="" noSelectionOption="true" />
+									<f:selectItem itemLabel="SIM" itemValue="true" />
+									<f:selectItem itemLabel="NÃO" itemValue="false" />
+								</p:selectOneMenu>
+
+								<p:outputLabel for="emproducaofinal" value="Em Produção? " />
+								<p:selectOneMenu id="emproducaofinal" value="#{projetoBean.emProducaoFinalizar}" disabled="#{projetoBean.tipoProjeto != 'Pessoal'}">
+									<f:selectItem itemLabel="Escolha" itemValue="" noSelectionOption="true" />
+									<f:selectItem itemLabel="SIM" itemValue="true" />
+									<f:selectItem itemLabel="NÃO" itemValue="false" />
+								</p:selectOneMenu>
+
+								<p:outputLabel />
+								<p:commandButton id="botao-finalizarProjeto" value="Finalizar"
+									actionListener="#{projetoBean.Finalizar}" process="projetofinal-dialog" update="projetofinalPanel table-projetos"
+									oncomplete="PF('projetofinaL-Dialog').hide()" />
+					</p:panelGrid>
+
+				</h:panelGroup>
+
+			</p:dialog>
+			
+			<!-- Dialog telefones -->
+        
+        <p:dialog id="extras-dialog" widgetVar="extras-Dialog" header="Informações Extras do Projeto" responsive="true" modal="true" showEffect="blind" hideEffect="explode">
+        				
+        		<h:panelGroup id="extraPanel" layout="block" styleClass="ui-fluid">
+						
+        	<p:outputPanel id="extras-detalhes" style="text-align:center;">
+            <p:panelGrid columns="2" styleClass="panelgrid-noborder"
+						columnClasses="ui-grid-col-4, ui-grid-col-8">
+           
+                <f:facet name="header">
+                    <p:outputLabel value="Informações Extras do Projeto: #{projetoBean.projetoSelecionado.nome}" /> 
+                </f:facet>
+ 
+                <h:outputText value="Em Produção: "/>
+                <h:outputText value="#{projetoBean.extraEmProducao}" rendered="#{projetoBean.cor == 'Pessoal'}" style="color:darkgreen;font-size:15px" styleClass="outputLabel"/>
+                <h:outputText value="#{projetoBean.extraEmProducao}" rendered="#{projetoBean.cor == 'Seletivo'}" style="color:red;font-size:15px" styleClass="outputLabel"/>
+                
+                <h:outputText value="Empresa: " />
+                <h:outputText value="#{projetoBean.extraEmpresa}" rendered="#{projetoBean.cor == 'Pessoal'}" style="color:red;font-size:15px" styleClass="outputLabel"/>
+                <h:outputText value="#{projetoBean.extraEmpresa}" rendered="#{projetoBean.cor == 'Seletivo'}" style="color:darkgreen;font-size:15px" styleClass="outputLabel"/>
+                
+                <h:outputText value="Aprovado: " />
+                <h:outputText value="#{projetoBean.extraAprovado}" rendered="#{projetoBean.cor == 'Pessoal'}" style="color:red;font-size:15px" styleClass="outputLabel"/>
+                <h:outputText value="#{projetoBean.extraAprovado}" rendered="#{projetoBean.cor == 'Seletivo'}" style="color:darkgreen;font-size:15px" styleClass="outputLabel"/>
+                
+              
+                
+                
+            </p:panelGrid>
+          </p:outputPanel>
+        </h:panelGroup>
+      </p:dialog>  
 
 			<p:confirmDialog showEffect="fade" hideEffect="fade"
 				id="confirm-dialog" global="true">
