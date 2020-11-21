@@ -106,6 +106,7 @@ public class UsuarioBean implements Serializable {
 			ex.printStackTrace();
 			messages.fatal("Erro ao Salvar os dados do Usuário");
 		}finally{
+			usuarioSelecionado = null;
 			Inicializar();
 		}
 	}
@@ -119,6 +120,7 @@ public class UsuarioBean implements Serializable {
 			ex.printStackTrace();
 			messages.fatal("Erro ao Excluir o Usuario");
 		}finally{
+			usuarioSelecionado = null;
 			Inicializar();
 		}
 	}

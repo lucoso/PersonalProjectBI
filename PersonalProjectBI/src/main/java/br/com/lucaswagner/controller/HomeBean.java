@@ -45,8 +45,6 @@ public class HomeBean implements Serializable {
 	private PieChartModel graficoProjetosFinalizados;
 
 	private BarChartModel graficoTotalProjetos;
-
-	//private LineChartModel graficoProjetosProducao;
 	
 	private DonutChartModel graficoProjetosProducao;
 
@@ -186,6 +184,7 @@ public class HomeBean implements Serializable {
 
 		List<Projeto> projetos = pm.BuscarTodosProjetos();
 		int count = 0;
+		int percent = 0;
 
 		if (!projetos.isEmpty()) {
 			for (Projeto p : projetos) {
@@ -194,8 +193,10 @@ public class HomeBean implements Serializable {
 				}
 			}
 		}
+		
+		percent = (count * 100)/projetos.size();
 
-		return count;
+		return percent;
 	}
 
 	private void MontarGraficoTotalProjetosFinalizados() {
@@ -278,56 +279,10 @@ public class HomeBean implements Serializable {
         model.addCircle(circle);
         
         graficoProjetosProducao = model;
-        graficoProjetosProducao.setTitle("Donut Chart");
+        graficoProjetosProducao.setTitle("Gráfico Projetos Pessoais em Produção");
         graficoProjetosProducao.setLegendPosition("w");
         graficoProjetosProducao.setSliceMargin(5);
         graficoProjetosProducao.setShowDataLabels(true);
         
 	}
-
-	/*private void MontarGraficoProducao() {
-	    
-		 LineChartModel model = new LineChartModel();
-		 ChartSeries pessoalEmProducao = new ChartSeries();
-	     ChartSeries pessoalNaoEmProducao = new ChartSeries();
-	     
-	     List<Pessoal> projetosPessoais = pm.BuscarTodosProjetosPessoais();
-	     int emProducao = 0;
-	     int NaoEmProducao = 0;
-	     
-	     for(Pessoal p : projetosPessoais){
-	    	 if(p.isEmProducao() == true){
-	    		 emProducao++;
-	    	 }else{
-	    		 NaoEmProducao++;
-	    	 }
-	     }
-	     
-	     pessoalEmProducao.set(null, emProducao);
-	     pessoalNaoEmProducao.set(null, NaoEmProducao);
-	     
-
-	     pessoalEmProducao.setLabel("Projetos Pessoais que Estão em Produção");
-	     pessoalNaoEmProducao.setLabel("Projetos Pessoais que Não Estão em Produção");
-	     
-	    	
-	    	 
-	    model.addSeries(pessoalEmProducao);
-	    model.addSeries(pessoalNaoEmProducao);
-	    int maxGraficoLinha =  projetosPessoais.size() + 10;
-	    
-	    graficoProjetosProducao = model;
-	        
-	    graficoProjetosProducao.setTitle("Gráfico dos Projetos Pessoais em Produção ou Não");
-	    graficoProjetosProducao.setAnimate(true);
-	    graficoProjetosProducao.setLegendPosition("nw");
-	    graficoProjetosProducao.setShowPointLabels(true);
-	    graficoProjetosProducao.getAxes().put(AxisType.X, null);
-	    Axis yAxis = graficoProjetosProducao.getAxis(AxisType.Y);
-	    yAxis.setLabel("Quantidade");
-	    yAxis.setMin(0);
-	    yAxis.setMax(maxGraficoLinha);
-	    yAxis.setTickFormat("%d");
-	}*/
-
 }

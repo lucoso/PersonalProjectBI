@@ -45,8 +45,6 @@ public class ProjetoBean implements Serializable {
 
 	private boolean atualizar = false;
 
-	// private List<Projeto> projetos;
-
 	private LazyDataModel<Projeto> projetos;
 
 	private String tipoProjeto;
@@ -76,6 +74,10 @@ public class ProjetoBean implements Serializable {
 	private boolean pessoal;
 	
 	private boolean seletivo;
+	
+	private ProcessoSeletivo seletivoParaAtualizar;
+	
+	private Pessoal pessoalParaAtualizar;
 
 	private ProjetoManager pm = new ProjetoManager();
 	
@@ -243,6 +245,22 @@ public class ProjetoBean implements Serializable {
 		this.seletivo = seletivo;
 	}
 
+	public ProcessoSeletivo getSeletivoParaAtualizar() {
+		return seletivoParaAtualizar;
+	}
+
+	public void setSeletivoParaAtualizar(ProcessoSeletivo seletivoParaAtualizar) {
+		this.seletivoParaAtualizar = seletivoParaAtualizar;
+	}
+
+	public Pessoal getPessoalParaAtualizar() {
+		return pessoalParaAtualizar;
+	}
+
+	public void setPessoalParaAtualizar(Pessoal pessoalParaAtualizar) {
+		this.pessoalParaAtualizar = pessoalParaAtualizar;
+	}
+
 	/**
 	 * Métodos
 	 * 
@@ -306,21 +324,43 @@ public class ProjetoBean implements Serializable {
 		};
 
 	}
+	
+	private void Limpar(){
+		tipoProjeto = null;
+		dataInicio = null;
+		dataFinalizado = null;
+		empresaResponsavel = null;
+		projetoSelecionado = null;
+	}
 
 	public void AtualizarProjetoEmEdicao() {
 
 		projeto = projetoSelecionado;
 		
 		if(projetoSelecionado instanceof ProcessoSeletivo){
-			ProcessoSeletivo ps = (ProcessoSeletivo) projeto;
-			aprovado = ps.isAprovado();
-			empresaResponsavel = ps.getEmpresaResponsavel();
+			seletivoParaAtualizar = (ProcessoSeletivo) projeto;
+			aprovado = seletivoParaAtualizar.isAprovado();
+			empresaResponsavel = seletivoParaAtualizar.getEmpresaResponsavel();
+			dataInicio = JavaUtil.convertToDate(seletivoParaAtualizar.getDataInicio());
+			if(seletivoParaAtualizar.getDataFinalizado() != null){
+				dataFinalizado = JavaUtil.convertToDate(seletivoParaAtualizar.getDataFinalizado());
+			}else{
+				dataFinalizado = null;
+			}
+			
 			tipoProjeto = "Seletivo";
 		}
 		
 		if(projetoSelecionado instanceof Pessoal){
-			Pessoal pessoal = (Pessoal) projeto;
-			emProducao = pessoal.isEmProducao();
+			pessoalParaAtualizar = (Pessoal) projeto;
+			emProducao = pessoalParaAtualizar.isEmProducao();
+			dataInicio = JavaUtil.convertToDate(pessoalParaAtualizar.getDataInicio());
+			if(pessoalParaAtualizar.getDataFinalizado() != null){
+				dataFinalizado = JavaUtil.convertToDate(pessoalParaAtualizar.getDataFinalizado());
+			}else{
+				dataFinalizado = null;
+			}
+			
 			tipoProjeto = "Pessoal";
 		}
 		
@@ -330,13 +370,15 @@ public class ProjetoBean implements Serializable {
 	public void ProjetoSeletivoEmEdicao() {
 
 		projeto = new ProcessoSeletivo();
+		tipoProjeto = "Seletivo";
 	}
 
 	public void ProjetoPessoalEmEdicao() {
 
 		projeto = new Pessoal();
+		tipoProjeto = "Pessoal";
 	}
-
+	
 	public void Salvar() {
 
 		try {
@@ -346,42 +388,33 @@ public class ProjetoBean implements Serializable {
 			if (atualizar == true) {
 				
 				if(tipoProjeto.equals("Pessoal")){
-					Pessoal pessoal = new Pessoal();
-					pessoal.setNome(projeto.getNome());
-					pessoal.setDataInicio(datainicio);
 					
-					pessoal.setFinalizado(projeto.isFinalizado());
+					pessoalParaAtualizar.setDataInicio(datainicio);
 					
 					if(dataFinalizado != null){
 						LocalDate datafinal = JavaUtil.convertToLocalDate(dataFinalizado);
-						pessoal.setDataFinalizado(datafinal);
+						pessoalParaAtualizar.setDataFinalizado(datafinal);
 					}
 										
-					pessoal.setEmProducao(emProducao);
-					pessoal.setUsuario(u);
+					pessoalParaAtualizar.setEmProducao(emProducao);
 					
-					pm.Atualizar(pessoal);
+					pm.Atualizar(pessoalParaAtualizar);
 					
 				}else{
-					ProcessoSeletivo seletivo = new ProcessoSeletivo();
-					seletivo.setNome(projeto.getNome());
-					seletivo.setDataInicio(datainicio);
-					seletivo.setFinalizado(projeto.isFinalizado());
+					
+					seletivoParaAtualizar.setDataInicio(datainicio);
 					
 					if(dataFinalizado != null){
 						LocalDate datafinal = JavaUtil.convertToLocalDate(dataFinalizado);
-						seletivo.setDataFinalizado(datafinal);
+						seletivoParaAtualizar.setDataFinalizado(datafinal);
 					}
 										
-					seletivo.setEmpresaResponsavel(empresaResponsavel);
-					seletivo.setAprovado(aprovado);
-					seletivo.setUsuario(u);
+					seletivoParaAtualizar.setEmpresaResponsavel(empresaResponsavel);
+					seletivoParaAtualizar.setAprovado(aprovado);
 					
-					pm.Atualizar(seletivo);
+					pm.Atualizar(seletivoParaAtualizar);
 					
 				}
-
-				//pm.Atualizar(projeto);
 
 				messages.info("Projeto Atualizado com sucesso!");
 
@@ -430,9 +463,9 @@ public class ProjetoBean implements Serializable {
 			ex.printStackTrace();
 			messages.fatal("Erro ao Salvar dados do Projeto");
 		} finally {
+			Limpar();
 			Inicializar();
 		}
-
 	}
 
 	public void ExcluirProjeto() {
@@ -441,12 +474,13 @@ public class ProjetoBean implements Serializable {
 
 			pm.Remover(projetoParaExcluir.getId());
 
-			messages.info("Porjeto Excluído com Sucesso!");
+			messages.info("Projeto Excluído com Sucesso!");
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			messages.error("Erro ao Excluir o Projeto");
 		} finally {
+			Limpar();
 			Inicializar();
 		}
 	}
@@ -493,7 +527,8 @@ public class ProjetoBean implements Serializable {
 			ex.printStackTrace();
 			messages.fatal("Erro ao Finalizar o Projeto");
 		}finally{
-			tipoProjeto = null;
+			Limpar();
+			Inicializar();
 		}
 	}
 	

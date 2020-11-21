@@ -51,7 +51,9 @@
 				</p:column>
 
 				<p:column headerText="Site" style="text-align:center" filterBy="#{empresa.site}">
-					<h:outputText value="#{empresa.site}" />
+					<a href="#{empresa.site}" target="_blank">
+						<h:outputText value="#{empresa.site}" />
+					</a>	
 				</p:column>
 				
 				<p:column headerText="Contato no RH" style="text-align:center">
@@ -98,7 +100,7 @@
 	
 						<p:outputLabel />
 						<p:commandButton id="botao-salvarEmpresa" value="Salvar" actionListener="#{empresaBean.Salvar}" process="empresa-dialog"
-											update="empresaPanel table-empresas" oncomplete="if (!args.validationFailed) PF('empresa-Dialog').hide()" />
+											update="empresaPanel table-empresas toolbar" oncomplete="if (!args.validationFailed) PF('empresa-Dialog').hide()" />
 					</p:panelGrid>
 
 				</h:panelGroup>

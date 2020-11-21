@@ -11,5 +11,11 @@ public class JavaUtil {
 	    	      .atZone(ZoneId.systemDefault())
 	    	      .toLocalDate();
 	    	}
+	
+	public static Date convertToDate(LocalDate dateToConvert) {
+	    return java.util.Date.from(dateToConvert.atStartOfDay()
+	      .atZone(ZoneId.systemDefault())
+	      .toInstant());
+	}
 
 }

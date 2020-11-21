@@ -52,7 +52,7 @@
 			<!-- datatable projetos -->
 
 			<p:dataTable id="table-projetos" value="#{projetoBean.projetos}"
-				var="projeto" reflow="true"
+				var="projeto" reflow="true" widgetVar="tableProjetos"
 				emptyMessage="Nenhum Projeto Cadastrado ate o Momento."
 				style="margin-top: 10px" rows="10" paginator="true"
 				paginatorPosition="bottom" lazy="true" resizableColumns="true"
@@ -82,8 +82,7 @@
 					</h:outputText>
 				</p:column>
 
-				<p:column headerText="Finalizado" style="text-align:center"
-					filterBy="#{projeto.finalizado}">
+				<p:column headerText="Finalizado" style="text-align:center">
 					<h:outputText value="Sim" rendered="#{projeto.finalizado == true}" />
 					<h:outputText value="Não" rendered="#{projeto.finalizado == false}" />
 				</p:column>
@@ -102,7 +101,7 @@
 				</p:column>
 
 				<p:column headerText="Excluir Projeto" style="text-align:center">
-					<p:commandButton icon="fa fa-fw fa-trash" title="Excluir Projeto"
+					<p:commandButton icon="fa fa-fw fa-trash" title="Excluir Projeto" update="table-projetos"
 						action="#{projetoBean.ExcluirProjeto}" process="@this">
 						<f:setPropertyActionListener target="#{projetoBean.projetoParaExcluir}" value="#{projeto}" />
 						<p:confirm header="Confirmação" message="Tem Certeza que Deseja Excluir? OBS: A Empresa desse projeto também será excluída!" icon="ui-icon-alert" />
@@ -196,7 +195,7 @@
 								<p:outputLabel />
 								<p:commandButton id="botao-salvarProjeto" value="Salvar"
 									actionListener="#{projetoBean.Salvar}" process="projeto-dialog"
-									update="projetoPanel table-projetos"
+									update="projetoPanel table-projetos toolbar"
 									oncomplete="if (!args.validationFailed) PF('projeto-Dialog').hide()" />
 					</p:panelGrid>
 
@@ -236,9 +235,8 @@
 								</p:selectOneMenu>
 
 								<p:outputLabel />
-								<p:commandButton id="botao-finalizarProjeto" value="Finalizar"
-									actionListener="#{projetoBean.Finalizar}" process="projetofinal-dialog" update="projetofinalPanel table-projetos"
-									oncomplete="PF('projetofinaL-Dialog').hide()" />
+								<p:commandButton id="botao-finalizarProjeto" value="Finalizar" actionListener="#{projetoBean.Finalizar}" process="projetofinal-dialog" 
+													update="projetofinalPanel table-projetos toolbar" oncomplete="PF('projetofinal-Dialog').hide()" />
 					</p:panelGrid>
 
 				</h:panelGroup>

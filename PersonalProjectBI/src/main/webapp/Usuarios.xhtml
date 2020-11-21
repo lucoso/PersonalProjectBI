@@ -30,12 +30,12 @@
 					</span>
 					
 					<p:commandButton value="Atualizar Usuario" process="@this" icon="fa fa-fw fa-edit" action="#{usuarioBean.AtualizarEmEdicao}" 
-										update="usuario-dialog" disabled="#{usuarioBean.usuarioSelecionado == null}" />
+										update="usuario-dialog" disabled="#{usuarioBean.usuarioSelecionado == null}" oncomplete="PF('usuario-Dialog').show()"  />
 					
 					<span class="ui-separator"/>
 					
 					<p:commandButton title="excluir" icon="ui-icon-trash" disabled="#{usuarioBean.usuarioSelecionado == null}" 
-								actionListener="#{usuarioBean.Remover}" update="table-usuarios" process="@this">
+								actionListener="#{usuarioBean.Remover}" update="table-usuarios toolbar" process="@this">
 				<p:confirm header="Confirmação" message="Tem Certeza que Deseja Excluir o Usuario?" icon="ui-icon-alert" />
     				</p:commandButton>					
 				
@@ -50,7 +50,7 @@
 			<p:ajax event="rowSelect" update=":usuario-frm:toolbar"/>
 			<p:ajax event="rowUnselect" update=":usuario-frm:toolbar"/>
 			
-			<p:column headerText="Nome do Usuario" style="text-align:center" filterBy="#{user.login}">
+			<p:column headerText="Nome do Usuario" style="text-align:center" filterBy="#{user.nome}">
 				<h:outputText value="#{user.nome}"/>
 			</p:column>
 		
@@ -114,7 +114,7 @@
             		
              
             		<p:outputLabel/>
-         			<p:commandButton id="botao-salvar" value="Salvar" action="#{usuarioBean.Salvar}" process="usuario-dialog" update="usuario-dialog table-usuarios"
+         			<p:commandButton id="botao-salvar" value="Salvar" action="#{usuarioBean.Salvar}" process="usuario-dialog" update="usuario-dialog table-usuarios toolbar"
             				 		 oncomplete="if (!args.validationFailed) PF('usuario-Dialog').hide()"/>
 					
 				</p:panelGrid>	

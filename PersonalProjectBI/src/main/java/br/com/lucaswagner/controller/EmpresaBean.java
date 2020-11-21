@@ -126,6 +126,7 @@ public class EmpresaBean implements Serializable {
 	public void AtualizarEmEdicao() {
 		
 		empresa = empresaSelecionada;
+		atualizar = true;
 
 	}
 	
@@ -145,6 +146,7 @@ public class EmpresaBean implements Serializable {
 			ex.printStackTrace();
 			messages.fatal("Erro ao Salvar os dados da Empresa");
 		}finally{
+			empresaSelecionada = null;
 			Inicializar();
 		}
 	}
