@@ -18,6 +18,7 @@ import org.hibernate.criterion.Restrictions;
 import br.com.lucaswagner.model.Pessoal;
 import br.com.lucaswagner.model.ProcessoSeletivo;
 import br.com.lucaswagner.model.Projeto;
+import br.com.lucaswagner.model.Status;
 import br.com.lucaswagner.util.JpaUtil;
 
 public class ProjetoManager implements Serializable {
@@ -32,6 +33,11 @@ public class ProjetoManager implements Serializable {
 		EntityManager em = JpaUtil.getEntityManager();
 
 		try {
+			
+			if(p.getStatus().equals(Status.Finalizado)){
+				p.setFinalizado(true);
+			}
+			
 			em.getTransaction().begin();
 			em.persist(p);
 			em.getTransaction().commit();
@@ -238,6 +244,11 @@ public class ProjetoManager implements Serializable {
 		EntityManager em = JpaUtil.getEntityManager();
 
 		try {
+			
+			if(p.getStatus().equals(Status.Finalizado)){
+				p.setFinalizado(true);
+			}
+			
 			em.getTransaction().begin();
 			em.merge(p);
 			em.getTransaction().commit();

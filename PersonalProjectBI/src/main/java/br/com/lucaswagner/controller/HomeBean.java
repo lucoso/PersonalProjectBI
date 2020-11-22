@@ -164,14 +164,30 @@ public class HomeBean implements Serializable {
 		int anos = 0;
 		int meses = 0;
 		int dias = 0;
-
-		for (Projeto p : projetos) {
-			if(p.isFinalizado() == true){
-				Period periodo = Period.between(p.getDataInicio(), p.getDataFinalizado());
-				anos = anos + periodo.getYears();
-				meses = meses + periodo.getMonths();
-				dias = dias + periodo.getDays();
-			}	
+		
+		if(!projetos.isEmpty()){
+			for (Projeto p : projetos) {
+				if(p.isFinalizado() == true){
+					Period periodo = Period.between(p.getDataInicio(), p.getDataFinalizado());
+					anos = anos + periodo.getYears();
+					meses = meses + periodo.getMonths();
+					dias = dias + periodo.getDays();
+				}	
+			}
+			
+			if(meses > 12){
+				int novoano = meses/12;
+				int novomes = meses%12;
+				anos = anos + novoano;
+				meses = novomes;
+			}
+			
+			if(dias > 30){
+				int novomes = dias/30;
+				int novodias = dias%30;
+				meses = meses + novomes;
+				dias = novodias;
+			}
 		}
 
 		tempoTotal = anos + "anos" + meses + "meses" + dias + "dias";
@@ -192,10 +208,10 @@ public class HomeBean implements Serializable {
 					count++;
 				}
 			}
+			
+			percent = (count * 100)/projetos.size();
 		}
 		
-		percent = (count * 100)/projetos.size();
-
 		return percent;
 	}
 

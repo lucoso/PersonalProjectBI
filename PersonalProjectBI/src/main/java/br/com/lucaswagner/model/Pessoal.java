@@ -17,8 +17,8 @@ public class Pessoal extends Projeto {
 	private boolean emProducao;
 
 	public Pessoal(Long id, String nome, LocalDate dataInicio, LocalDate dataFinalizado, boolean finalizado,
-			Usuario usuario, String tipo, boolean emProducao) {
-		super(id, nome, dataInicio, dataFinalizado, finalizado, usuario, tipo);
+			Status status, Usuario usuario, String tipo, boolean emProducao) {
+		super(id, nome, dataInicio, dataFinalizado, finalizado, status, usuario, tipo);
 		this.emProducao = emProducao;
 	}
 

@@ -5,6 +5,8 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -45,6 +47,10 @@ public abstract class Projeto implements Serializable {
 	@Column(name="Projeto_Finalizado", nullable=false)
 	private boolean finalizado;
 	
+	@Enumerated(EnumType.STRING)
+	@Column(name="Projeto_Status", nullable=false)
+	private Status status;
+	
 	@ManyToOne
 	@JoinColumn(name = "Usuario_ID")
 	private Usuario usuario;
@@ -52,14 +58,17 @@ public abstract class Projeto implements Serializable {
 	@Transient
 	private String tipo;
 
+	
+
 	public Projeto(Long id, String nome, LocalDate dataInicio, LocalDate dataFinalizado, boolean finalizado,
-			Usuario usuario, String tipo) {
+			Status status, Usuario usuario, String tipo) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.dataInicio = dataInicio;
 		this.dataFinalizado = dataFinalizado;
 		this.finalizado = finalizado;
+		this.status = status;
 		this.usuario = usuario;
 		this.tipo = tipo;
 	}
@@ -114,6 +123,14 @@ public abstract class Projeto implements Serializable {
 
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
 	}
 
 	public Long getId() {

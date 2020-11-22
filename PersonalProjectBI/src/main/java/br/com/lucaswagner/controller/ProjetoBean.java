@@ -22,6 +22,7 @@ import br.com.lucaswagner.model.Empresa;
 import br.com.lucaswagner.model.Pessoal;
 import br.com.lucaswagner.model.ProcessoSeletivo;
 import br.com.lucaswagner.model.Projeto;
+import br.com.lucaswagner.model.Status;
 import br.com.lucaswagner.model.Usuario;
 import br.com.lucaswagner.util.FacesMessages;
 import br.com.lucaswagner.util.JavaUtil;
@@ -68,6 +69,10 @@ public class ProjetoBean implements Serializable {
 	private String extraAprovado;
 	
 	private String extraEmpresa;
+	
+	private String extraCidade;
+	
+	private String cidade;
 	
 	private String cor;
 	
@@ -209,6 +214,14 @@ public class ProjetoBean implements Serializable {
 		this.extraAprovado = extraAprovado;
 	}
 
+	public String getExtraCidade() {
+		return extraCidade;
+	}
+
+	public void setExtraCidade(String extraCidade) {
+		this.extraCidade = extraCidade;
+	}
+
 	public String getExtraEmpresa() {
 		return extraEmpresa;
 	}
@@ -259,6 +272,14 @@ public class ProjetoBean implements Serializable {
 
 	public void setPessoalParaAtualizar(Pessoal pessoalParaAtualizar) {
 		this.pessoalParaAtualizar = pessoalParaAtualizar;
+	}
+
+	public String getCidade() {
+		return cidade;
+	}
+
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
 	}
 
 	/**
@@ -331,6 +352,7 @@ public class ProjetoBean implements Serializable {
 		dataFinalizado = null;
 		empresaResponsavel = null;
 		projetoSelecionado = null;
+		cidade = null;
 	}
 
 	public void AtualizarProjetoEmEdicao() {
@@ -346,6 +368,12 @@ public class ProjetoBean implements Serializable {
 				dataFinalizado = JavaUtil.convertToDate(seletivoParaAtualizar.getDataFinalizado());
 			}else{
 				dataFinalizado = null;
+			}
+			
+			if((!seletivoParaAtualizar.getCidade().equals(null)) || (!seletivoParaAtualizar.equals(""))){
+				cidade = seletivoParaAtualizar.getCidade();
+			}else{
+				cidade = null;
 			}
 			
 			tipoProjeto = "Seletivo";
@@ -408,6 +436,10 @@ public class ProjetoBean implements Serializable {
 						LocalDate datafinal = JavaUtil.convertToLocalDate(dataFinalizado);
 						seletivoParaAtualizar.setDataFinalizado(datafinal);
 					}
+					
+					if(!cidade.equals(null)){
+						seletivoParaAtualizar.setCidade(cidade);
+					}
 										
 					seletivoParaAtualizar.setEmpresaResponsavel(empresaResponsavel);
 					seletivoParaAtualizar.setAprovado(aprovado);
@@ -424,7 +456,8 @@ public class ProjetoBean implements Serializable {
 					Pessoal pessoal = new Pessoal();
 					pessoal.setNome(projeto.getNome());
 					pessoal.setDataInicio(datainicio);
-					pessoal.setFinalizado(projeto.isFinalizado());
+					pessoal.setStatus(projeto.getStatus());
+					//pessoal.setFinalizado(projeto.isFinalizado());
 					
 					if(dataFinalizado != null){
 						LocalDate datafinal = JavaUtil.convertToLocalDate(dataFinalizado);
@@ -441,11 +474,16 @@ public class ProjetoBean implements Serializable {
 					ProcessoSeletivo seletivo = new ProcessoSeletivo();
 					seletivo.setNome(projeto.getNome());
 					seletivo.setDataInicio(datainicio);
-					seletivo.setFinalizado(projeto.isFinalizado());
+					seletivo.setStatus(projeto.getStatus());
+					//seletivo.setFinalizado(projeto.isFinalizado());
 					
 					if(dataFinalizado != null){
 						LocalDate datafinal = JavaUtil.convertToLocalDate(dataFinalizado);
 						seletivo.setDataFinalizado(datafinal);
+					}
+					
+					if(cidade != null){
+						seletivo.setCidade(cidade);
 					}
 					
 					seletivo.setEmpresaResponsavel(empresaResponsavel);
@@ -471,9 +509,30 @@ public class ProjetoBean implements Serializable {
 	public void ExcluirProjeto() {
 
 		try {
-
+			
+			int count = 0;
+			Long empresaID = (long) 0;
+			
+			if(projetoParaExcluir instanceof ProcessoSeletivo){
+				
+				List<ProcessoSeletivo> seletivos = pm.BuscarTodosProjetosSeletivos();
+				ProcessoSeletivo ps = (ProcessoSeletivo) projetoParaExcluir;
+				if(!seletivos.isEmpty()){
+					empresaID = ps.getEmpresaResponsavel().getId();
+					for(ProcessoSeletivo p : seletivos){
+						if(empresaID == p.getEmpresaResponsavel().getId()){
+							count++;
+						}
+					}
+				}
+			}
+			
 			pm.Remover(projetoParaExcluir.getId());
-
+			
+			if((count <= 1) && (empresaID != 0)){
+				em.Remover(empresaID);
+			}
+			
 			messages.info("Projeto Excluído com Sucesso!");
 
 		} catch (Exception ex) {
@@ -508,6 +567,7 @@ public class ProjetoBean implements Serializable {
 				Pessoal p = (Pessoal) projetoSelecionado;
 				p.setDataFinalizado(LocalDate.now());
 				p.setEmProducao(emProducaoFinalizar);
+				p.setStatus(Status.Finalizado);
 				p.setFinalizado(true);
 				
 				pm.Atualizar(p);
@@ -516,6 +576,7 @@ public class ProjetoBean implements Serializable {
 				ProcessoSeletivo ps = (ProcessoSeletivo) projetoSelecionado;
 				ps.setDataFinalizado(LocalDate.now());
 				ps.setAprovado(aprovadoFinalizar);
+				ps.setStatus(Status.Finalizado);
 				ps.setFinalizado(true);
 				
 				pm.Atualizar(ps);
@@ -537,6 +598,7 @@ public class ProjetoBean implements Serializable {
 		if(projetoSelecionado instanceof Pessoal){
 			extraEmpresa = "Este Projeto é Pessoal e por isso não possui Informações de Empresa!";
 			extraAprovado = "Este Projeto é Pessoal e por isso não possui Informações de Aprovado!";
+			extraCidade = "Este Projeto é Pessoal e por isso não possui Informações de Cidade!";
 			Pessoal p = (Pessoal) projetoSelecionado;
 			
 			if(p.isEmProducao() == true){
@@ -553,6 +615,7 @@ public class ProjetoBean implements Serializable {
 			ProcessoSeletivo ps = (ProcessoSeletivo) projetoSelecionado;
 			
 			extraEmpresa = ps.getEmpresaResponsavel().getNome();
+			extraCidade = ps.getCidade();
 			
 			if(ps.isAprovado() == true){
 				extraAprovado = "SIM";

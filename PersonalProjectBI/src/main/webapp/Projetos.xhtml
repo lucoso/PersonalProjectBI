@@ -82,9 +82,8 @@
 					</h:outputText>
 				</p:column>
 
-				<p:column headerText="Finalizado" style="text-align:center">
-					<h:outputText value="Sim" rendered="#{projeto.finalizado == true}" />
-					<h:outputText value="Não" rendered="#{projeto.finalizado == false}" />
+				<p:column headerText="Status" style="text-align:center">
+					<h:outputText value="#{projeto.status}" />
 				</p:column>
 
 				<p:column headerText="Data Finalizado" style="text-align:center">
@@ -135,7 +134,7 @@
 							requiredMessage="Escolha o tipo de Projeto">
 							<f:selectItem itemLabel="Pessoal" itemValue="Pessoal" />
 							<f:selectItem itemLabel="Processo Seletivo" itemValue="Seletivo" />
-							<p:ajax update="aprovado empresa emproducao" />
+							<p:ajax update="aprovado empresa emproducao cidade" />
 						</p:selectOneRadio>
 
 						<p:outputLabel for="nome" value="Nome: " />
@@ -144,19 +143,19 @@
 						<p:outputLabel for="datainicio" value="Data Início: " />
 						<p:calendar id="datainicio" value="#{projetoBean.dataInicio}" pattern="dd/MM/yyyy" locale="pt"/>
 
-							<p:outputLabel for="finalizado" value="Finalizado? " />
-							<p:selectOneMenu id="finalizado"
-								value="#{projetoBean.projeto.finalizado}">
-								<f:selectItem itemLabel="Escolha" itemValue=""
-									noSelectionOption="true" />
-								<f:selectItem itemLabel="SIM" itemValue="true" />
-								<f:selectItem itemLabel="NÃO" itemValue="false" />
+							<p:outputLabel for="status" value="Status: " />
+							<p:selectOneMenu id="status" value="#{projetoBean.projeto.status}">
+								<f:selectItem itemLabel="Escolha" itemValue="" noSelectionOption="true" />
+								<f:selectItem itemLabel="Em Andamento" itemValue="EmAndamento" />
+								<f:selectItem itemLabel="Em Espera" itemValue="EmEspera" />
+								<f:selectItem itemLabel="Parado" itemValue="Parado" />
+								<f:selectItem itemLabel="Finalizado" itemValue="Finalizado" />
 								<p:ajax update="datafim" />
 							</p:selectOneMenu>
 
 							<p:outputLabel for="datafim" value="Data Finalizado: " />
 							<p:calendar id="datafim" value="#{projetoBean.dataFinalizado}" pattern="dd/MM/yyyy" locale="pt"
-								disabled="#{projetoBean.projeto.finalizado != true}"/>
+								disabled="#{projetoBean.projeto.status != 'Finalizado'}"/>
 
 								<p:outputLabel for="aprovado" value="Aprovado? " />
 								<p:selectOneMenu id="aprovado"
@@ -180,7 +179,10 @@
 
 								<p:outputLabel />
 								<p:tooltip id="toolTipEmpresa" for="empresa" showEvent="focus"
-									hideEvent="blur" showEffect="clip" hideEffect="explode" />
+									hideEvent="blur" />
+									
+								<p:outputLabel for="cidade" value="Cidade: " />
+								<p:inputText id="cidade" value="#{projetoBean.cidade}" disabled="#{projetoBean.tipoProjeto != 'Seletivo'}" />	
 
 								<p:outputLabel for="emproducao" value="Em Produção? " />
 								<p:selectOneMenu id="emproducao"
@@ -264,6 +266,10 @@
                 <h:outputText value="Empresa: " />
                 <h:outputText value="#{projetoBean.extraEmpresa}" rendered="#{projetoBean.cor == 'Pessoal'}" style="color:red;font-size:15px" styleClass="outputLabel"/>
                 <h:outputText value="#{projetoBean.extraEmpresa}" rendered="#{projetoBean.cor == 'Seletivo'}" style="color:darkgreen;font-size:15px" styleClass="outputLabel"/>
+                
+                <h:outputText value="Cidade: " />
+                <h:outputText value="#{projetoBean.extraCidade}" rendered="#{projetoBean.cor == 'Pessoal'}" style="color:red;font-size:15px" styleClass="outputLabel"/>
+                <h:outputText value="#{projetoBean.extraCidade}" rendered="#{projetoBean.cor == 'Seletivo'}" style="color:darkgreen;font-size:15px" styleClass="outputLabel"/>
                 
                 <h:outputText value="Aprovado: " />
                 <h:outputText value="#{projetoBean.extraAprovado}" rendered="#{projetoBean.cor == 'Pessoal'}" style="color:red;font-size:15px" styleClass="outputLabel"/>
