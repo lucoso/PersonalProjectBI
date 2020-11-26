@@ -11,9 +11,9 @@ import org.apache.commons.mail.SimpleEmail;
 public class EmailUtil {
 	
 	 private static final String HOSTNAME = "smtp.gmail.com";
-	 private static final String USERNAME = "lucasmanhaes2@gmail.com";
-	 private static final String PASSWORD = "lmaw27supernatural";
-	 private static final String EMAILORIGEM = "lucasmanhaes2@gmail.com";
+	 private static final String USERNAME = "usuario@gmail.com";
+	 private static final String PASSWORD = "**********";
+	 private static final String EMAILORIGEM = "usuario@gmail.com";
 	 
 	 @SuppressWarnings("deprecation")
 	public static void enviaEmail(String titulo, String destino, String mensagem) throws EmailException {
